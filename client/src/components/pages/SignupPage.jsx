@@ -25,8 +25,8 @@ const SignupPage = () => {
             setPasswordMatch(false);
             return;
         }
-
-        const headers = {
+ 
+        const headers = { 
             "Content-Type": "application/json",
             "credentials": 'include'
         }
@@ -35,7 +35,7 @@ const SignupPage = () => {
             "username":formData.username,
             "password":formData.password
         }
-        const res = await fetch("/test", {
+        const res = await fetch("/user/create", {
             method:"POST",
             body:JSON.stringify(body),
             headers:headers,
