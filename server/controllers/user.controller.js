@@ -29,6 +29,7 @@ const createUser = async function (req, res) {
 			refreshToken: refreshToken,
 		});
         res.status(201).json({
+            success:true,
             message:"user is created"
         })
 	} catch (error) {
@@ -36,7 +37,8 @@ const createUser = async function (req, res) {
             message:"error occured while createing the user!"
         });
 	}
-	console.log(user);
+	
 };
+
 
 export { createUser };

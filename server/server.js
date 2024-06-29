@@ -13,8 +13,8 @@ try {
 	console.log("Failed to connect to DB, Something went wrong!");
 }
 
-
-// using middlewares 
+ 
+// using middlewares  
 
 app.use(cookieParser());
 app.use(express.json());
@@ -23,7 +23,7 @@ app.use(express.json());
 
 // using routers
 
-app.use("/user", userRouter);
+app.use("/api/user", userRouter);
 
 
 // start the app 

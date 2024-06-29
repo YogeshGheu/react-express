@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
+import {useNavigate} from "react-router-dom"
+
 
 const SignupPage = () => {
 
     const [passwordMatch, setPasswordMatch] = useState(true);
+    const navigate = useNavigate();
+
 
     const [formData, setFormData] = useState({
         email: "yogesh11@gmail.com",
@@ -35,14 +39,19 @@ const SignupPage = () => {
             "username":formData.username,
             "password":formData.password
         }
-        const res = await fetch("/user/create", {
+        const res = await fetch("/api/user/create", {
             method:"POST",
             body:JSON.stringify(body),
             headers:headers,
         });
         const response = await res.json();
 
-        console.log("response from the server: ", response)
+        if (response.success){
+            console.log("message: ", response.message);
+            navigate("/user/login")
+        }else{
+            console.log("message: ", response.message);
+        }
 
     }
 
