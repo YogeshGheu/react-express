@@ -1,5 +1,8 @@
 import { User } from "../models/user.model.js";
-import {generateRefreshToken, generateAccessToken} from "../utils/tokenGeneration.utils.js";
+import {
+	generateRefreshToken,
+	generateAccessToken,
+} from "../utils/tokenGeneration.utils.js";
 import {
 	encryptPassword,
 	isPasswordValid,
@@ -67,49 +70,87 @@ const loginUser = async function (req, res) {
 		$or: [{ username }, { email }],
 	});
 
-    //check if the user exists or not
+	//check if the user exists or not
 	if (!user) {
 		return res
 			.status(404)
 			.json({ success: false, message: "no user found!" });
 	}
 
-    // now check the password 
-    const isValidPassword = await isPasswordValid(req.body.password, user.password)
-	if(isValidPassword){ 
+	// now check the password
+	const isValidPassword = await isPasswordValid(
+		req.body.password,
+		user.password
+	);
+	if (isValidPassword) {
+		//generate access & refresh tokens and send to the client in httpOnly cookies
 
-        //generate access & refresh tokens and send to the client in httpOnly cookies
+		const accessToken = generateAccessToken({
+			id: user._id,
+			email: user.email,
+			username: user.username,
+		});
+		const refreshToken = generateRefreshToken({
+			id: user._id,
+			email: user.email,
+		});
 
-        const accessToken = generateAccessToken({ id: user._id, email: user.email, username: user.username });
-        console.log("accessToken: ", accessToken);
-
-        const refreshToken = generateRefreshToken({ id: user._id, email: user.email});
-        console.log("refreshToken: ", refreshToken)
-        
-        // Update the refresh token in the DB
+		// Update the refresh token in the DB
 		user.refreshToken = refreshToken;
 		await user.save();
 
-        const options = {
-            httpOnly:true,
-            sameSite: 'Strict',
-            secure:true,
-            maxAge:15000,
-        }
-        
-        res.cookie("Access Token", accessToken, {...options, maxAge:900000}); //900000 millisec = 15 minutes
-        res.cookie("Refresh Token", refreshToken, {...options, maxAge:86400000}); //86400000 millisec = 1day
+		const options = {
+			httpOnly: true,
+			sameSite: "Strict",
+			maxAge: 15000,
+		};
 
-        
-        res.json({ success: true, message: "user logged in" });
-    } else{
-        res.status(401).json({
-            success:false,
-            message:"incorrect password!"
-        })
-    }
+		res.cookie("Access Token", accessToken, { ...options, maxAge: 900000 }); //900000 millisec = 15 minutes
+		res.cookie("Refresh Token", refreshToken, {
+			...options,
+			maxAge: 86400000,
+		}); //86400000 millisec = 1day
 
-	
+		res.json({ success: true, message: "user logged in" });
+	} else {
+		res.status(401).json({
+			success: false,
+			message: "incorrect password!",
+		});
+	}
 };
 
-export { createUser, loginUser };
+const logoutUser = async function (req, res) {
+	
+	try {
+		// fetch the user from DB based on refreshToken
+		const user = await User.findOne({
+			refreshToken: req.cookies["Refresh Token"],
+		});
+		//clear the refreshToken from DB
+		user.refreshToken = " ";
+		await user.save();
+	} catch (error) {
+		return res.status(401).json({
+			success: false,
+			message: "token already expired",
+		});
+	} 
+
+	//clear cookies from browser
+	await res.clearCookie("Access Token", {
+		httpOnly: true,
+		sameSite: "Strict",
+	});
+	await res.clearCookie("Refresh Token", {
+		httpOnly: true,
+		sameSite: "Strict",
+	});
+
+	res.status(200).json({
+		success: true,
+		message: "user logged out",
+	});
+};
+
+export { createUser, loginUser, logoutUser };

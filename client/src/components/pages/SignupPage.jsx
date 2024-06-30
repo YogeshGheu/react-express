@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 
 const SignupPage = () => {
 
     const [passwordMatch, setPasswordMatch] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('')
     const navigate = useNavigate();
 
 
@@ -29,29 +30,30 @@ const SignupPage = () => {
             setPasswordMatch(false);
             return;
         }
- 
-        const headers = { 
+
+        const headers = {
             "Content-Type": "application/json",
             "credentials": 'include'
         }
         const body = {
-            "email":formData.email,
-            "username":formData.username,
-            "password":formData.password
+            "email": formData.email,
+            "username": formData.username,
+            "password": formData.password
         }
         const res = await fetch("/api/user/create", {
-            method:"POST",
-            body:JSON.stringify(body),
-            headers:headers,
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: headers,
         });
         const response = await res.json();
 
-        if (response.success){
+        if (response.success) {
             console.log(response);
             navigate("/user/login")
-        }else{
-            console.log("message: ", response.message);
-            navigate("/user/login")
+        } else {
+            // console.log("message: ", response.message);
+            // navigate("/user/login")
+            setErrorMessage("User already exists!")
         }
 
     }
@@ -121,6 +123,14 @@ const SignupPage = () => {
                             <p className="mt-2 text-sm text-red-600">Passwords do not match</p>
                         )}
                     </div>
+                    <div className='h-[15px]'>
+                        {errorMessage && (
+                            <div className="text-red-500 text-sm">
+                                {errorMessage}
+                            </div>
+                        )}
+                    </div>
+
                     <div>
                         <button
                             type="submit"
