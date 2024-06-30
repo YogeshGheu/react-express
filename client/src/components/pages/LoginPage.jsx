@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
     const [formData, setFormData] = useState({
-        usernameOrEmail: '',
-        password: '',
+        usernameOrEmail: 'yogesh11@gmail.com',
+        password: '1234',
     });
     const navigate = useNavigate();
 
@@ -14,9 +14,9 @@ const LoginPage = () => {
             ...formData,
             [name]: value,
         });
-    };
+    }; 
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event) => { 
         event.preventDefault();
 
         const headers = {
@@ -41,7 +41,7 @@ const LoginPage = () => {
             console.log('Login failed: ', response.message);
         }
     };
-
+ 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-900">
             <div className="w-full max-w-md p-8 space-y-6 bg-gray-300 rounded-lg shadow-md">

@@ -47,10 +47,11 @@ const SignupPage = () => {
         const response = await res.json();
 
         if (response.success){
-            console.log("message: ", response.message);
+            console.log(response);
             navigate("/user/login")
         }else{
             console.log("message: ", response.message);
+            navigate("/user/login")
         }
 
     }
