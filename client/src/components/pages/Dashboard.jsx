@@ -6,7 +6,7 @@ const Dashboard = () => {
   return (
     <div>
       <Navbar/>
-      <div className="container flex justify-center ">
+      <div>
         hello my name is yogesh
       </div>
       

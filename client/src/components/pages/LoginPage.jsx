@@ -37,7 +37,7 @@ const LoginPage = (props) => {
 
     if (response.success) {
       console.log('User logged in');
-      navigate('/app/home'); 
+      navigate('/app/user/home'); 
     } else {
       setErrorMessage("Invalid Credentials!")
       // console.log('Login failed: ', response.message);

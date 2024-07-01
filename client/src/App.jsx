@@ -1,14 +1,12 @@
 
 
-import SignupPage from "./components/pages/SignupPage"
-
-
 function App() {
 
   return (
     <>
-      <SignupPage />
 
+      hello this is app.jsx
+      
     </>
   )
 }
