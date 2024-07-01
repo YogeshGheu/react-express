@@ -12,8 +12,16 @@ const Navbar = () => {
   };
 
   const handleAbout = async () => {
-    navigate('/app/user/about');
+    const res = await fetch("/api/app/get-user-details", {method:"POST"});
+    const response = await res.json();
+
+    if (!response.success){
+      navigate('/user/login');
+    }
+    console.log(response.user)
+    navigate('/app/user/about', { state: { "userDetails": response.user } });
   };
+
   const handleHome = async () => {
     navigate('/app/user/home');
   };

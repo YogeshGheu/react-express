@@ -1,7 +1,9 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import userRouter from "./routers/user.router.js";
+import appRouter from "./routers/app.router.js";
 import connectDB from "./connections/connectDB.js";
+import { authenticateToken } from "./middlewares/authenticate.token.middleware.js";
 
 const app = express();
 const port = 3000;
@@ -18,12 +20,12 @@ try {
 
 app.use(cookieParser());
 app.use(express.json());
-
-
+app.use("/api/app", authenticateToken)
 
 // using routers
 
 app.use("/api/user", userRouter);
+app.use("/api/app", appRouter)
 
 
 // start the app 

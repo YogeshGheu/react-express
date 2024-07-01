@@ -122,20 +122,20 @@ const loginUser = async function (req, res) {
 
 const logoutUser = async function (req, res) {
 	
-	try {
-		// fetch the user from DB based on refreshToken
-		const user = await User.findOne({
-			refreshToken: req.cookies["Refresh Token"],
-		});
-		//clear the refreshToken from DB
-		user.refreshToken = " ";
-		await user.save();
-	} catch (error) {
-		return res.status(401).json({
-			success: false,
-			message: "token already expired",
-		});
-	} 
+	// try {
+	// 	// fetch the user from DB based on refreshToken
+	// 	const user = await User.findOne({
+	// 		refreshToken: req.cookies["Refresh Token"],
+	// 	});
+	// 	//clear the refreshToken from DB
+	// 	user.refreshToken = " ";
+	// 	await user.save();
+	// } catch (error) {
+	// 	return res.status(401).json({
+	// 		success: false,
+	// 		message: "token already expired",
+	// 	});
+	// } 
 
 	//clear cookies from browser
 	await res.clearCookie("Access Token", {

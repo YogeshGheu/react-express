@@ -42,6 +42,9 @@ const LoginPage = (props) => {
       setErrorMessage("Invalid Credentials!")
       // console.log('Login failed: ', response.message);
     }
+
+    //provide a sign up button below the login button which will redirect to signup page
+
   };
 
   return (
