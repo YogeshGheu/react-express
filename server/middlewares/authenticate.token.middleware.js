@@ -86,13 +86,13 @@ const authenticateToken = async function (req, res, next) {
 			if (accessTokenConfirmation && refreshTokenConfirmation) {
 				next();
 			} else {
-				res.status(401).json({
+				return res.status(401).json({
 					success: false,
 					message: "Invalid tokens, please login again",
 				});
 			}
 		} catch (error) {
-			res.status(401).json({
+			return res.status(401).json({
 				success: false,
 				message: "Token verification failed, please login again",
 			});

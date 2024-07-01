@@ -16,7 +16,7 @@ const Navbar = () => {
     const response = await res.json();
 
     if (!response.success){
-      navigate('/user/login');
+      return navigate('/user/login', { state: { "error": "Session Expired! Please Login Again." } });
     }
     console.log(response.user)
     navigate('/app/user/about', { state: { "userDetails": response.user } });

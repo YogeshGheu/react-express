@@ -1,13 +1,27 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from "react-router-dom"
 
 const LoginPage = (props) => {
+
+
+
   const [formData, setFormData] = useState({
     usernameOrEmail: 'yogesh11@gmail.com',
     password: '1234',
   });
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate();
+
+
+
+  const location = useLocation();
+  const { error } = location.state || "";
+
+  // Clear error from location state-> will clear the error when any entry is changed and component re-renders
+  if (error) {
+    navigate('.', { state: { error: '' } });
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,7 +51,7 @@ const LoginPage = (props) => {
 
     if (response.success) {
       console.log('User logged in');
-      navigate('/app/user/home'); 
+      navigate('/app/user/home');
     } else {
       setErrorMessage("Invalid Credentials!")
       // console.log('Login failed: ', response.message);
@@ -46,6 +60,8 @@ const LoginPage = (props) => {
     //provide a sign up button below the login button which will redirect to signup page
 
   };
+
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
@@ -84,6 +100,11 @@ const LoginPage = (props) => {
             {errorMessage && (
               <div className="text-red-500 text-sm">
                 {errorMessage}
+              </div>
+            )}
+            {!errorMessage && error && (
+              <div className="text-red-500 text-sm">
+                {error}
               </div>
             )}
           </div>
