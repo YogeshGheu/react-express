@@ -3,7 +3,7 @@ import Navbar from "../partials/NavigationBar"
 import Footer from "../partials/FooterBar"
 
 const Dashboard = () => {
-  const lst = ["as", 2, 3, 12, 3, 1, 41, 12, 1]
+  const lst = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
   // use effect to fetch all the products user has saved
 
@@ -13,11 +13,11 @@ const Dashboard = () => {
     <div>
       <Navbar />
 
-      <div className='flex flex-row flex-wrap max-h-[630px] overflow-scroll'>
+      <div className='flex flex-row flex-wrap max-h-[630px] min-h-[630px] overflow-scroll'>
         {lst.map((item) => {
           return (
 
-            <div className="max-w-[222px] max-h-[400px] min-w-[222px] min-h-[400px] m-2 overflow-hidden rounded-xl shadow-lg bg-white">
+            <div key={item} className="max-w-[222px] max-h-[400px] min-w-[222px] min-h-[400px] m-2 overflow-hidden rounded-xl shadow-lg bg-white">
               <div className='min-h-full flex flex-col justify-between'>
                 <div className="">
                   <img

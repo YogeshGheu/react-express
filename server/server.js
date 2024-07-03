@@ -2,8 +2,16 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import userRouter from "./routers/user.router.js";
 import appRouter from "./routers/app.router.js";
+import productRouter from "./routers/product.router.js";
 import connectDB from "./connections/connectDB.js";
 import { authenticateToken } from "./middlewares/authenticate.token.middleware.js";
+import bodyParser from "body-parser";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 const port = 3000;
@@ -15,23 +23,30 @@ try {
 	console.log("Failed to connect to DB, Something went wrong!");
 }
 
- 
-// using middlewares  
+// Serve static files
+app.use(
+	"/public/uploads",
+	express.static(path.resolve(__dirname, "./public/uploads"))
+);
 
+// using middlewares
+app.use(
+	bodyParser.urlencoded({
+		extended: true,
+	})
+);
 app.use(cookieParser());
-app.use(express.json());
-app.use("/api/app", authenticateToken)
+app.use(bodyParser.json());
+app.use("/api/app", authenticateToken);
+app.use("/api/product", authenticateToken);
 
 // using routers
 
 app.use("/api/user", userRouter);
-app.use("/api/app", appRouter)
+app.use("/api/app", appRouter);
+app.use("/api/product", productRouter);
 
-
-// start the app 
+// start the app
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`);
 });
-
-//next learn how refresh and access token works
-// and before that create routes and controllers(if needed)

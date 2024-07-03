@@ -29,7 +29,9 @@ const Navbar = () => {
     navigate('/app/user/contact');
   };
 
-
+  const handleAddProduct = async ()=>{
+    navigate("/app/user/add-product")
+  }
 
 
   return (
@@ -39,11 +41,14 @@ const Navbar = () => {
           <Link onClick={handleHome} className="px-3 py-2 rounded hover:bg-gray-700">
             Home
           </Link>
-          <Link onClick={handleAbout} className="px-3 py-2 rounded hover:bg-gray-700">
-            About
+          <Link onClick={handleAddProduct} className="px-3 py-2 rounded hover:bg-gray-700">
+            Add Product
           </Link>
           <Link onClick={handleContact} className="px-3 py-2 rounded hover:bg-gray-700">
             Contact
+          </Link>
+          <Link onClick={handleAbout} className="px-3 py-2 rounded hover:bg-gray-700">
+            About
           </Link>
         </div>
         <button

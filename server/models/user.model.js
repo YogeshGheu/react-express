@@ -18,7 +18,11 @@ const userSchema = new mongoose.Schema({
     refreshToken:{
         type: String,
 		required:true
-    }
+    },
+	products:{
+		type:mongoose.Schema.ObjectId,
+		ref:"Product"
+	}
 });
 
 export const User = mongoose.model("User", userSchema);
