@@ -4,13 +4,14 @@ import Footer from "../partials/FooterBar"
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+
 const Dashboard = () => {
+
+  
 
   const navigate = useNavigate();
   const [products, setProducts] = useState([])
-
-
-  const lst = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  console.log(products)
 
   useEffect(() => {
     const products = async function () {
@@ -22,7 +23,7 @@ const Dashboard = () => {
         }
         const productsArray = response.products
         setProducts(productsArray)
-        // console.log(productsArray);
+
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -37,6 +38,7 @@ const Dashboard = () => {
 
     <div>
       <Navbar />
+      
 
       <div className='flex flex-row flex-wrap max-h-[630px] min-h-[630px] overflow-scroll'>
         {products.map((product) => {
@@ -47,8 +49,9 @@ const Dashboard = () => {
                 <div className="">
                   <img
                     className="w-full"
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmFY5RA0Ss-GoPLSzYANKGJ_PxTBiCrAbt5Q&s" // Replace with actual image URL
-                    alt="Earphone"
+                    src={`http://localhost:3000${product.productImage}`}
+
+                    alt="product image"
                   />
                 </div>
                 <div>
@@ -59,7 +62,7 @@ const Dashboard = () => {
                     </p>
                   </div>
                   <div className="px-6 py-2 flex items-center justify-between">
-                    <span className="font-bold text-xl">${product.productPrice}</span>
+                    <span className="font-bold text-xl">INR{" " + product.productPrice}</span>
                   </div>
                   <div>
                     <button className="w-full bg-gray-800 text-white font-bold py-2 hover:bg-gray-700">

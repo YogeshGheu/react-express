@@ -3,17 +3,19 @@ import { useState } from 'react'
 
 import Navbar from '../partials/NavigationBar'
 import Footer from '../partials/FooterBar'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddProduct = () => {
 
-    const [productName, setProductName] = useState('laptop');
-    const [productDescription, setProductDescription] = useState('this is a laptop');
-    const [price, setPrice] = useState('20');
+    const [productName, setProductName] = useState('');
+    const [productDescription, setProductDescription] = useState('');
+    const [price, setPrice] = useState('');
     const [image, setImage] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
 
         const formData = new FormData();
         formData.append('productName', productName);
@@ -23,13 +25,17 @@ const AddProduct = () => {
 
 
         const res = await fetch("/api/product/add-product", {
-            method : "POST",
-            body:formData
+            method: "POST",
+            body: formData
         })
         const response = await res.json()
         console.log("response: ", response)
-        
-        
+        if (response.success) {
+            toast.success('Product added successfully!');
+        }else{
+            toast.error('Failed to add product.');
+        }
+
         // Handle form submission
         // console.log({
         //     productName,
@@ -107,6 +113,7 @@ const AddProduct = () => {
                 </form>
             </div>
             <Footer />
+            <ToastContainer />
         </>
     )
 }

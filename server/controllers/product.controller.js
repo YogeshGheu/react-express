@@ -3,25 +3,26 @@ import { Product } from "../models/product.model.js";
 import { User } from "../models/user.model.js";
 
 const addProduct = async function (req, res) {
-	const { productName, productDescription, price, image } = req.body;
-	console.log(productName, productDescription, price, image);
+	const { productName, productDescription, price } = req.body;
+	console.log(productName, productDescription, price);
+    console.log(req.file)
 	try {
+
 		const product = await Product.create({
 			productName: productName,
 			productDescription: productDescription,
 			productPrice: price,
-			productImage: "image URL",
+			productImage: `/public/uploads/${req.file.filename}`
 		});
 
 		// const ObjId = new mongoose.Types.ObjectId(product._id)
 		const ObjId = product._id;
-		console.log("this is product id saved in the datbase: ", ObjId);
 
 		const user = await User.updateOne(
 			{ email: req.user.email },
 			{ $push: { products: product._id } }
 		);
-		console.log(user);
+		// console.log(user);
 	} catch (error) {
 		return res.status(500).json({
 			success: "false",
@@ -29,7 +30,7 @@ const addProduct = async function (req, res) {
 			error: error,
 		});
 	}
-
+    
 	return res.status(200).json({
 		success: true,
 		message: "ok",
@@ -47,7 +48,7 @@ const getProducts = async function (req, res) {
 	} catch (error) {
 		return res.status(500).json({
 			success: "false",
-			message: "product is not created, Internal Server Error!",
+			message: "Internal Server Error!",
 			error: error,
 		});
 	}
