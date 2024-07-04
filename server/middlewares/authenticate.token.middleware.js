@@ -84,6 +84,7 @@ const authenticateToken = async function (req, res, next) {
 			const refreshTokenConfirmation = verifyRefreshToken(refreshToken);
 
 			if (accessTokenConfirmation && refreshTokenConfirmation) {
+				req.user = accessTokenConfirmation; // attaching the user to the request object
 				next();
 			} else {
 				return res.status(401).json({

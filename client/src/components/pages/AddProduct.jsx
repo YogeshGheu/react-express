@@ -31,12 +31,12 @@ const AddProduct = () => {
         
         
         // Handle form submission
-        console.log({
-            productName,
-            productDescription,
-            price,
-            image
-        });
+        // console.log({
+        //     productName,
+        //     productDescription,
+        //     price,
+        //     image
+        // });
     };
 
     const handleImageChange = (e) => {

@@ -21,10 +21,10 @@ const productSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-    user:{
-        type:mongoose.Schema.ObjectId,
-        ref:"User"
-    }
+    createdBy: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "User",
+	},
 });
 
 export const Product = mongoose.model("Product", productSchema)

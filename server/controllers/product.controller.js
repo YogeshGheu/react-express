@@ -1,22 +1,32 @@
 import mongoose from "mongoose";
 import { Product } from "../models/product.model.js";
+import { User } from "../models/user.model.js";
 
 const addProduct = async function (req, res) {
 	const { productName, productDescription, price, image } = req.body;
 	console.log(productName, productDescription, price, image);
-
 	try {
-		await Product.create({
+		const product = await Product.create({
 			productName: productName,
 			productDescription: productDescription,
 			productPrice: price,
 			productImage: "image URL",
 		});
+
+		// const ObjId = new mongoose.Types.ObjectId(product._id)
+		const ObjId = product._id;
+		console.log("this is product id saved in the datbase: ", ObjId);
+
+		const user = await User.updateOne(
+			{ email: req.user.email },
+			{ $push: { products: product._id } }
+		);
+		console.log(user);
 	} catch (error) {
 		return res.status(500).json({
 			success: "false",
 			message: "product is not created, Internal Server Error!",
-            error:error
+			error: error,
 		});
 	}
 
@@ -27,28 +37,20 @@ const addProduct = async function (req, res) {
 };
 
 const getProducts = async function (req, res) {
-	const { productName, productDescription, price, image } = req.body;
-	console.log(productName, productDescription, price, image);
-
 	try {
-		await Product.create({
-			productName: productName,
-			productDescription: productDescription,
-			productPrice: price,
-			productImage: "image URL",
+		const user = await User.find({}).populate({path:"products"});
+		return res.status(200).json({
+			success: true,
+			message: "ok",
+			products: user[0].products,
 		});
 	} catch (error) {
 		return res.status(500).json({
 			success: "false",
 			message: "product is not created, Internal Server Error!",
-            error:error
+			error: error,
 		});
 	}
-
-	return res.status(200).json({
-		success: true,
-		message: "ok",
-	});
 };
 
 export { addProduct, getProducts };

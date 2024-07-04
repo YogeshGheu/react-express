@@ -12,10 +12,10 @@ const Navbar = () => {
   };
 
   const handleAbout = async () => {
-    const res = await fetch("/api/app/get-user-details", {method:"POST"});
+    const res = await fetch("/api/app/get-user-details", { method: "POST" });
     const response = await res.json();
 
-    if (!response.success){
+    if (!response.success) {
       return navigate('/user/login', { state: { "error": "Session Expired! Please Login Again." } });
     }
     console.log(response.user)
@@ -29,7 +29,7 @@ const Navbar = () => {
     navigate('/app/user/contact');
   };
 
-  const handleAddProduct = async ()=>{
+  const handleAddProduct = async () => {
     navigate("/app/user/add-product")
   }
 
