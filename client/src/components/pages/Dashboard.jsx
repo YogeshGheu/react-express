@@ -7,12 +7,9 @@ import { useNavigate } from 'react-router-dom'
 
 const Dashboard = () => {
 
-  
-
   const navigate = useNavigate();
   const [products, setProducts] = useState([])
-  console.log(products)
-
+ 
   useEffect(() => {
     const products = async function () {
       try {
@@ -40,7 +37,7 @@ const Dashboard = () => {
       <Navbar />
       
 
-      <div className='flex flex-row flex-wrap max-h-[630px] min-h-[630px] overflow-scroll'>
+      <div className='flex flex-row flex-wrap max-h-[640px] min-h-[640px] overflow-scroll'>
         {products.map((product) => {
           return (
 
@@ -77,10 +74,6 @@ const Dashboard = () => {
         }
         )}
       </div>
-
-
-
-
 
 
       <Footer />

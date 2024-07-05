@@ -10,12 +10,15 @@ const getUserDetails = async function (req, res) {
 		const user = await User.findOne({ email: payload.email }).select(
 			"-__v -password -refreshToken"
 		);
-		res.json({
+		return res.json({
 			success: true,
 			user: user,
 		});
 	} catch (error) {
-		console.log("no access token found! (app.controller.js)")
+		return res.json({
+			success: false,
+			user: "something went wrong",
+		});
 	}
 };
 

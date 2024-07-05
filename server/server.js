@@ -39,12 +39,19 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use("/api/app", authenticateToken);
 app.use("/api/product", authenticateToken);
+app.use("/api/verify-login", authenticateToken);
 
 // using routers
 
 app.use("/api/user", userRouter);
 app.use("/api/app", appRouter);
 app.use("/api/product", productRouter);
+
+app.post("/api/verify-login", (req, res) => {
+	return res.json({
+		success: true,
+	});
+});
 
 // start the app
 app.listen(port, () => {

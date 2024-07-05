@@ -12,25 +12,62 @@ const Navbar = () => {
   };
 
   const handleAbout = async () => {
-    const res = await fetch("/api/app/get-user-details", { method: "POST" });
-    const response = await res.json();
 
-    if (!response.success) {
-      return navigate('/user/login', { state: { "error": "Session Expired! Please Login Again." } });
+    try {
+      const res = await fetch("/api/verify-login", { method: "POST" })
+      const response = await res.json()
+      if (response.success) {
+        return navigate('/app/user/about');
+      } else {
+        return navigate('/user/login', { state: { "error": "Something went wrong. Please Login Again." } });
+      }
+    } catch (error) {
+      console.log("Error Occured! - ", error)
     }
-    console.log(response.user)
-    navigate('/app/user/about', { state: { "userDetails": response.user } });
   };
+  
 
   const handleHome = async () => {
-    navigate('/app/user/home');
+
+    try {
+      const res = await fetch("/api/verify-login", { method: "POST" })
+      const response = await res.json()
+      if (response.success) {
+        return navigate('/app/user/home');
+      } else {
+        return navigate('/user/login', { state: { "error": "Something went wrong. Please Login Again." } });
+      }
+    } catch (error) {
+      console.log("Error Occured! - ", error)
+    }
   };
   const handleContact = async () => {
-    navigate('/app/user/contact');
+    
+    try {
+      const res = await fetch("/api/verify-login", { method: "POST" })
+      const response = await res.json()
+      if (response.success) {
+        return navigate('/app/user/contact');
+      } else {
+        return navigate('/user/login', { state: { "error": "Something went wrong. Please Login Again." } });
+      }
+    } catch (error) {
+      console.log("Error Occured! - ", error)
+    }
   };
 
   const handleAddProduct = async () => {
-    navigate("/app/user/add-product")
+    try {
+      const res = await fetch("/api/verify-login", { method: "POST" })
+      const response = await res.json()
+      if (response.success) {
+        return navigate("/app/user/add-product")
+      } else {
+        return navigate('/user/login', { state: { "error": "Something went wrong. Please Login Again." } });
+      }
+    } catch (error) {
+      console.log("Error Occured! - ", error)
+    }
   }
 
 
@@ -44,9 +81,9 @@ const Navbar = () => {
           <Link onClick={handleAddProduct} className="px-3 py-2 rounded hover:bg-gray-700">
             Add Product
           </Link>
-          <Link onClick={handleContact} className="px-3 py-2 rounded hover:bg-gray-700">
+          {/* <Link onClick={handleContact} className="px-3 py-2 rounded hover:bg-gray-700">
             Contact
-          </Link>
+          </Link> */}
           <Link onClick={handleAbout} className="px-3 py-2 rounded hover:bg-gray-700">
             About
           </Link>

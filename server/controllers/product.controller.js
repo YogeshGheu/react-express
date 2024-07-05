@@ -25,7 +25,7 @@ const addProduct = async function (req, res) {
 		// console.log(user);
 	} catch (error) {
 		return res.status(500).json({
-			success: "false",
+			success: false,
 			message: "product is not created, Internal Server Error!",
 			error: error,
 		});
