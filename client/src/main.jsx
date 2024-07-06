@@ -12,8 +12,13 @@ import AboutUser from './components/pages/AboutUser.jsx'
 import SignupPage from "./components/pages/SignupPage.jsx"
 import ContactUser from "./components/pages/ContactUser.jsx"
 import AddProduct from './components/pages/AddProduct.jsx'
+import PublicDashboard from './components/pages/PublicDashboard.jsx'
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <PublicDashboard/>,
+  },
   {
     path: "/user/create",
     element: <SignupPage/>,

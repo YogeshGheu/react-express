@@ -48,12 +48,21 @@ app.use("/api/app", appRouter);
 app.use("/api/product", productRouter);
 
 app.post("/api/verify-login", (req, res) => {
-	return res.json({
+	console.log("req.body");
+	res.json({
 		success: true,
 	});
+});
+
+app.post("/api/public-user/get-products", (req, res) => {
+	console.log(req.body);
+	res.json({ message: "hello from server" });
 });
 
 // start the app
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`);
 });
+
+// need to reconfigure the routes, so any user can see the homepage
+// but how he will fetch the products related to a user

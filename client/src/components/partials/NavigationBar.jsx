@@ -1,18 +1,51 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
-const Navbar = () => {
+const Navbar = (props) => {
+
+  
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
+
+
+  useEffect(() => {
+    const checkUserLoginStatus = async function () {
+      try {
+        const res = await fetch("/api/verify-login", { method: "POST" })
+        const response = await res.json()
+        if (response.success) {
+          return setIsLoggedIn(true)
+
+        } else {
+          return setIsLoggedIn(false)
+        }
+      } catch (error) {
+        console.log("Error Occured! - ", error)
+      }
+    };
+
+    checkUserLoginStatus()
+
+  }, [])
+
+
+  const handleLoginLogout = async () => {
+    if(!isLoggedIn){
+      return navigate("/user/login")
+    }
+
     const res = await fetch("/api/user/logout", { method: "POST" });
     const response = await res.json()
     console.log(response);
-    navigate('/user/login'); // Redirect to login page after logout
+    setIsLoggedIn(false)
+    // navigate('/app/user/home'); // Redirect to login page after logout
+    navigate('/'); // Redirect to login page after logout
   };
 
   const handleAbout = async () => {
-
     try {
       const res = await fetch("/api/verify-login", { method: "POST" })
       const response = await res.json()
@@ -25,11 +58,12 @@ const Navbar = () => {
       console.log("Error Occured! - ", error)
     }
   };
-  
 
   const handleHome = async () => {
-
     try {
+      if(!isLoggedIn){
+        return navigate("/")
+      }
       const res = await fetch("/api/verify-login", { method: "POST" })
       const response = await res.json()
       if (response.success) {
@@ -41,8 +75,9 @@ const Navbar = () => {
       console.log("Error Occured! - ", error)
     }
   };
+
   const handleContact = async () => {
-    
+
     try {
       const res = await fetch("/api/verify-login", { method: "POST" })
       const response = await res.json()
@@ -78,22 +113,31 @@ const Navbar = () => {
           <Link onClick={handleHome} className="px-3 py-2 rounded hover:bg-gray-700">
             Home
           </Link>
-          <Link onClick={handleAddProduct} className="px-3 py-2 rounded hover:bg-gray-700">
+          {isLoggedIn && <Link onClick={handleAddProduct} className="px-3 py-2 rounded hover:bg-gray-700">
             Add Product
-          </Link>
+          </Link>}
+
           {/* <Link onClick={handleContact} className="px-3 py-2 rounded hover:bg-gray-700">
             Contact
           </Link> */}
-          <Link onClick={handleAbout} className="px-3 py-2 rounded hover:bg-gray-700">
+          {isLoggedIn && <Link onClick={handleAbout} className="px-3 py-2 rounded hover:bg-gray-700">
             About
-          </Link>
+          </Link>}
+
         </div>
-        <button
-          onClick={handleLogout}
+
+        {isLoggedIn ? <button
+          onClick={handleLoginLogout}
           className="px-3 py-2 rounded bg-red-600 hover:bg-red-700"
         >
           Logout
-        </button>
+        </button> : <button
+          onClick={handleLoginLogout}
+          className="px-3 py-2 rounded bg-green-600 hover:bg-green-700"
+        >
+          Login
+        </button>}
+
       </div>
     </nav>
   );
