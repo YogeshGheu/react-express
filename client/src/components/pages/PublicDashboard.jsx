@@ -8,6 +8,7 @@ const PublicDashboard = () => {
     const [showProductContainer, setShowProductContainer] = useState(false)
     const [emailOrShopName, setEmailOrShopName] = useState("")
     const [products, setProducts] = useState([])
+    const [errorMessage, setErrorMessage] = useState('')
 
     const handleChange = function (e) {
         setEmailOrShopName(e.target.value)
@@ -15,17 +16,17 @@ const PublicDashboard = () => {
 
     const findProducts = async function () {
         const body = {
-            "emailOrShopName":emailOrShopName
+            "emailOrShopName": emailOrShopName
         }
         try {
             const res = await fetch("/api/public-user/get-products", {
-                method:"POST",
-                body:JSON.stringify(body),
-                headers:{'Content-Type': 'application/json'}
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: { 'Content-Type': 'application/json' }
             })
             const response = await res.json()
-            if(!response.success){
-                console.log(response)
+            if (!response.success) {
+                setErrorMessage(response.message)
                 return setShowProductContainer(false);
             }
             setProducts(response.products)
@@ -33,7 +34,7 @@ const PublicDashboard = () => {
         } catch (error) {
             console.log("Something went wrong - ", error)
         }
-        
+
     }
 
     return (
@@ -41,28 +42,36 @@ const PublicDashboard = () => {
             <Navbar />
             <div className='flex flex-row flex-wrap max-h-[640px] min-h-[640px] overflow-scroll'>
                 {!showProductContainer ? <div className='flex items-start justify-center min-h-full min-w-full'>
-                    <div className='mt-5 flex items-center justify-center gap-3'>
-                        <label htmlFor="usernameOrEmail" className="block text-sm font-medium text-gray-700">
-                            Email/Shop Name
-                        </label>
-                        <input
-                            type="text"
-                            name="usernameOrEmail"
-                            id="usernameOrEmail"
-                            value={emailOrShopName}
-                            onChange={handleChange}
-                            required
-                            className=" px-3 py-2 mt-1 border border-gray-300 rounded-md"
-                        />
+                    <div className='flex flex-col justify-center items-center'>
+                        <div className='mt-5 flex items-center justify-center gap-3'>
+                            <label htmlFor="usernameOrEmail" className="block text-sm font-medium text-gray-700">
+                                Email/Shop Name
+                            </label>
+                            <input
+                                type="text"
+                                name="usernameOrEmail"
+                                id="usernameOrEmail"
+                                value={emailOrShopName}
+                                onChange={handleChange}
+                                required
+                                className=" px-3 py-2 mt-1 border border-gray-300 rounded-md"
+                            />
 
-                        <button
-                            type="submit"
-                            className="px-4 py-2 text-white bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                            onClick={findProducts}
-                        >
-                            Find Products
-                        </button>
+                            <button
+                                type="submit"
+                                className="px-4 py-2 text-white bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                onClick={findProducts}
+                            >
+                                Find Products
+                            </button>
+                        </div>
+                        {errorMessage && (
+                            <div className="text-red-500 text-sm">
+                                {errorMessage}
+                            </div>
+                        )}
                     </div>
+
                 </div> :
                     (
                         products.map((product) => {
@@ -102,6 +111,7 @@ const PublicDashboard = () => {
                     )
                 }
             </div>
+
             <Footer />
         </>
 
