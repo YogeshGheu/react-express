@@ -4,15 +4,14 @@ import { User } from "../models/user.model.js";
 
 const addProduct = async function (req, res) {
 	const { productName, productDescription, price } = req.body;
-	console.log(productName, productDescription, price);
-    console.log(req.file)
+	// console.log(productName, productDescription, price);
+	// console.log(req.file);
 	try {
-
 		const product = await Product.create({
 			productName: productName,
 			productDescription: productDescription,
 			productPrice: price,
-			productImage: `/public/uploads/${req.file.filename}`
+			productImage: `/public/uploads/${req.file.filename}`,
 		});
 
 		// const ObjId = new mongoose.Types.ObjectId(product._id)
@@ -30,7 +29,7 @@ const addProduct = async function (req, res) {
 			error: error,
 		});
 	}
-    
+
 	return res.status(200).json({
 		success: true,
 		message: "ok",
@@ -39,7 +38,9 @@ const addProduct = async function (req, res) {
 
 const getProducts = async function (req, res) {
 	try {
-		const user = await User.find({}).populate({path:"products"});
+		const user = await User.find({ email: req.user.email }).populate({
+			path: "products",
+		});
 		return res.status(200).json({
 			success: true,
 			message: "ok",

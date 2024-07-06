@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Navbar from '../partials/NavigationBar'
 import Footer from '../partials/FooterBar'
 import { useState } from 'react'
@@ -17,13 +17,23 @@ const PublicDashboard = () => {
         const body = {
             "emailOrShopName":emailOrShopName
         }
-        const res = await fetch("/api/public-user/get-products", {
-            method:"POST",
-            body:JSON.stringify(body),
-            headers:{'Content-Type': 'application/json'}
-        })
-        const response = await res.json()
-        console.log(response)
+        try {
+            const res = await fetch("/api/public-user/get-products", {
+                method:"POST",
+                body:JSON.stringify(body),
+                headers:{'Content-Type': 'application/json'}
+            })
+            const response = await res.json()
+            if(!response.success){
+                console.log(response)
+                return setShowProductContainer(false);
+            }
+            setProducts(response.products)
+            setShowProductContainer(true);
+        } catch (error) {
+            console.log("Something went wrong - ", error)
+        }
+        
     }
 
     return (

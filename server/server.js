@@ -9,6 +9,7 @@ import bodyParser from "body-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { publicRouter } from "./routers/PublicRouter.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -46,17 +47,12 @@ app.use("/api/verify-login", authenticateToken);
 app.use("/api/user", userRouter);
 app.use("/api/app", appRouter);
 app.use("/api/product", productRouter);
+app.use("/api/public-user/get-products", publicRouter)
 
 app.post("/api/verify-login", (req, res) => {
-	console.log("req.body");
 	res.json({
 		success: true,
 	});
-});
-
-app.post("/api/public-user/get-products", (req, res) => {
-	console.log(req.body);
-	res.json({ message: "hello from server" });
 });
 
 // start the app
