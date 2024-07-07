@@ -34,7 +34,6 @@ const PublicDashboard = () => {
         } catch (error) {
             console.log("Something went wrong - ", error)
         }
-
     }
 
     return (
@@ -106,8 +105,7 @@ const PublicDashboard = () => {
                                     </div>
                                 </div>
                             )
-                        }
-                        )
+                        })
                     )
                 }
             </div>

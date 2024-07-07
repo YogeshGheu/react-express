@@ -1,44 +1,61 @@
-import React from 'react'
-import { useState } from 'react'
-
-import Navbar from '../partials/NavigationBar'
-import Footer from '../partials/FooterBar'
+import React, { useState, useRef, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useRef } from 'react';
+import Navbar from '../partials/NavigationBar';
+import Footer from '../partials/FooterBar';
+import { useNavigate } from 'react-router-dom';
 
 const AddProduct = () => {
 
+    const navigate = useNavigate()
     const fileInputRef = useRef(null);
-    const [productName, setProductName] = useState('');
-    const [productDescription, setProductDescription] = useState('');
-    const [price, setPrice] = useState('');
-    const [image, setImage] = useState(null);
+    const [formData, setFormData] = useState({
+        productName: '',
+        productDescription: '',
+        price: '',
+        image: null,
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleImageChange = (e) => {
+        setFormData({
+            ...formData,
+            image: e.target.files[0],
+        });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-
-        const formData = new FormData();
-        formData.append('productName', productName);
-        formData.append('productDescription', productDescription);
-        formData.append('price', price);
-        formData.append('image', image);
-
+        const form = new FormData();
+        form.append('productName', formData.productName);
+        form.append('productDescription', formData.productDescription);
+        form.append('price', formData.price);
+        form.append('image', formData.image);
 
         try {
             const res = await fetch("/api/product/add-product", {
                 method: "POST",
-                body: formData
-            })
-            const response = await res.json()
-            console.log("response: ", response)
+                body: form,
+            });
+
+            const response = await res.json();
+
             if (response.success) {
                 toast.success('Product added successfully!');
-                setImage(null)
-                setPrice("");
-                setProductDescription("");
-                setProductName("");
+                setFormData({
+                    productName: '',
+                    productDescription: '',
+                    price: '',
+                    image: null,
+                });
                 if (fileInputRef.current) {
                     fileInputRef.current.value = '';
                 }
@@ -50,14 +67,28 @@ const AddProduct = () => {
         }
     };
 
-    const handleImageChange = (e) => {
-        setImage(e.target.files[0]);
-    };
+    useEffect(() => {
+        const checkUserLoginStatus = async function () {
+          try {
+            const res = await fetch("/api/verify-login", { method: "POST" })
+            const response = await res.json()
+            if(!response.success){
+                return navigate('/user/login', { state: { "error": "Something went wrong. Please Login Again." } });
+            }
+          } catch (error) {
+            console.log("Error Occured! - ", error)
+            setIsLoggedIn(false)
+          }
+        };
+        checkUserLoginStatus()
+    
+      }, [])
+    
 
     return (
         <>
             <Navbar />
-            <div className='flex justify-center  max-h-[640px] min-h-[640px]'>
+            <div className='flex justify-center min-h-[640px]'>
                 <div className='mt-8'>
                     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 bg-white shadow-md rounded-lg">
                         <div className="mb-4">
@@ -67,8 +98,9 @@ const AddProduct = () => {
                             <input
                                 type="text"
                                 id="productName"
-                                value={productName}
-                                onChange={(e) => setProductName(e.target.value)}
+                                name="productName"
+                                value={formData.productName}
+                                onChange={handleChange}
                                 className="border rounded w-full py-2 px-3 focus:outline-none"
                             />
                         </div>
@@ -78,8 +110,9 @@ const AddProduct = () => {
                             </label>
                             <textarea
                                 id="productDescription"
-                                value={productDescription}
-                                onChange={(e) => setProductDescription(e.target.value)}
+                                name="productDescription"
+                                value={formData.productDescription}
+                                onChange={handleChange}
                                 className="border rounded w-full py-2 px-3 focus:outline-none"
                             />
                         </div>
@@ -90,8 +123,9 @@ const AddProduct = () => {
                             <input
                                 type="number"
                                 id="price"
-                                value={price}
-                                onChange={(e) => setPrice(e.target.value)}
+                                name="price"
+                                value={formData.price}
+                                onChange={handleChange}
                                 className="border rounded w-full py-2 px-3 focus:outline-none"
                             />
                         </div>
@@ -102,6 +136,7 @@ const AddProduct = () => {
                             <input
                                 type="file"
                                 id="image"
+                                name="image"
                                 accept="image/*"
                                 onChange={handleImageChange}
                                 className="border rounded w-full py-2 px-3 focus:outline-none"
@@ -122,7 +157,7 @@ const AddProduct = () => {
             <Footer />
             <ToastContainer />
         </>
-    )
+    );
 }
 
-export default AddProduct
+export default AddProduct;

@@ -7,6 +7,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext"
 import Dashboard from './components/pages/Dashboard.jsx'
 import AboutUser from './components/pages/AboutUser.jsx'
 import SignupPage from "./components/pages/SignupPage.jsx"
@@ -17,19 +18,19 @@ import PublicDashboard from './components/pages/PublicDashboard.jsx'
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <PublicDashboard/>,
+    element: <PublicDashboard />,
   },
   {
     path: "/user/create",
-    element: <SignupPage/>,
+    element: <SignupPage />,
   },
   {
     path: "/user/login",
-    element: <LoginPage/>,
+    element: <LoginPage />,
   },
   {
     path: "/app/user/home",
-    element: <Dashboard/>,
+    element: <Dashboard />,
   },
   {
     path: "/app/user/add-product",
@@ -37,18 +38,20 @@ const router = createBrowserRouter([
   },
   {
     path: "/app/user/about",
-    element: <AboutUser/>,
+    element: <AboutUser />,
   },
   {
     path: "/app/user/contact",
-    element: <ContactUser/>,
+    element: <ContactUser />,
   },
 
 ]);
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>,
+
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  
 )

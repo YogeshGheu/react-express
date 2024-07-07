@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from "react-router-dom"
 
@@ -18,10 +18,14 @@ const LoginPage = (props) => {
   const location = useLocation();
   const { error } = location.state || "";
 
-  // Clear error from location state-> will clear the error when any entry is changed and component re-renders
-  if (error) {
-    navigate('.', { state: { error: '' } });
-  }
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(error);
+      navigate('.', { state: { error: '' } });
+    }
+  }, [error, navigate]);
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,7 +40,6 @@ const LoginPage = (props) => {
 
     const headers = {
       'Content-Type': 'application/json',
-      credentials: 'include',
     };
     const body = {
       usernameOrEmail: formData.usernameOrEmail,
@@ -49,13 +52,12 @@ const LoginPage = (props) => {
     });
     const response = await res.json();
 
-    if (response.success) {
-      console.log('User logged in');
-      navigate('/app/user/home');
-    } else {
+    if (!response.success) {
       setErrorMessage("Invalid Credentials!")
-      // console.log('Login failed: ', response.message);
+      return navigate('/user/login');
     }
+    console.log('User logged in');
+    navigate('/app/user/home');
 
     //provide a sign up button below the login button which will redirect to signup page
 
@@ -115,6 +117,14 @@ const LoginPage = (props) => {
             >
               Login
             </button>
+            <button
+              type="button"
+              onClick={() => { navigate("/user/create") }}
+              className="w-full mt-3 px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              Sign Up
+            </button>
+
           </div>
         </form>
       </div>
