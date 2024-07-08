@@ -7,8 +7,8 @@ const LoginPage = (props) => {
 
 
   const [formData, setFormData] = useState({
-    usernameOrEmail: 'yogesh11@gmail.com',
-    password: '1234',
+    usernameOrEmail: '',
+    password: '',
   });
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate();

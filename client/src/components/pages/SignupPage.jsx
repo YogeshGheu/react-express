@@ -10,10 +10,10 @@ const SignupPage = () => {
 
 
     const [formData, setFormData] = useState({
-        email: "yogesh11@gmail.com",
-        username: "yogesh",
-        password: "1234",
-        confirmPassword: "1234"
+        email: "",
+        username: "",
+        password: "",
+        confirmPassword: ""
     })
 
     const handleChange = function (e) {

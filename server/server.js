@@ -10,6 +10,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import { publicRouter } from "./routers/PublicRouter.js";
+import "dotenv/config";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,8 +19,9 @@ const app = express();
 const port = 3000;
 
 // connect to database
+
 try {
-	connectDB("mongodb://localhost:27017/react-express-app");
+	connectDB(process.env.MONGO_DB_URL);
 } catch (error) {
 	console.log("Failed to connect to DB, Something went wrong!");
 }
