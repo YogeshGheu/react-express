@@ -9,7 +9,7 @@ import bodyParser from "body-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import { publicRouter } from "./routers/PublicRouter.js";
+import publicRouter from "./routers/PublicRouter.js";
 import "dotenv/config";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -49,7 +49,7 @@ app.use("/api/verify-login", authenticateToken);
 app.use("/api/user", userRouter);
 app.use("/api/app", appRouter);
 app.use("/api/product", productRouter);
-app.use("/api/public-user/get-products", publicRouter)
+app.use("/api/public-user", publicRouter)
 
 app.post("/api/verify-login", (req, res) => {
 	res.json({
