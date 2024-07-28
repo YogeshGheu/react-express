@@ -18,9 +18,9 @@ const PublicDashboard = () => {
         setEmailOrShopName(e.target.value)
     }
 
-    const findProducts = async function () {
+    const findProducts = async function (shopName) {
         const body = {
-            "emailOrShopName": emailOrShopName
+            "emailOrShopName": shopName
         }
         try {
             const res = await fetch("/api/public-user/get-products", {
@@ -40,6 +40,10 @@ const PublicDashboard = () => {
         }
     }
 
+    const handleShopClick = function (e) {
+        findProducts(e.target.innerHTML)
+    }
+
     useEffect(() => {
         const findShops = async function () {
             try {
@@ -49,27 +53,27 @@ const PublicDashboard = () => {
                 const response = await res.json()
                 if (!response.success) {
                     setErrorMessage(response.message)
-                    return setShops([{"name":"error occured", itemCount:"not found"}])
+                    return setShops([{ "name": "error occured", itemCount: "not found" }])
                 }
                 setShops(response.shops)
             } catch (error) {
                 console.log("Something went wrong - ", error)
-                return setShops([{"name":"error occured", itemCount:"not found"}])
+                return setShops([{ "name": "error occured", itemCount: "not found" }])
 
             }
         }
         findShops()
     }, [])
-    
-    
+
+
 
 
     return (
         <>
-            <Navbar />
+            {!showProductContainer? <Navbar /> : <Navbar homeText="Back to Home" />}
+            
             <div className='flex flex-row flex-wrap max-h-[640px] min-h-[calc(100vh-140px)] overflow-scroll'>
                 {!showProductContainer ?
-
                     <div className=' flex-colflex items-start justify-center min-h-full min-w-full'>
                         <div className='flex mx-auto flex-col justify-center items-center'>
                             <div className='mt-5 flex items-center justify-center gap-3'>
@@ -89,7 +93,7 @@ const PublicDashboard = () => {
                                 <button
                                     type="submit"
                                     className="px-4 py-2 text-white bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                    onClick={findProducts}
+                                    onClick={() => { findProducts(emailOrShopName) }}
                                 >
                                     Find Products
                                 </button>
@@ -125,8 +129,8 @@ const PublicDashboard = () => {
                                         {shops.map((shop, index) => (
                                             <tr key={index} className="border-b">
                                                 <td className="py-2 px-4 text-left text-sm text-gray-700">{index + 1}</td>
-                                                <td className="py-2 text-left text-sm text-gray-700">{shop.name}</td>
-                                                <td className="py-2 text-left px-[10px] text-sm text-gray-700">{shop.itemCount}</td>
+                                                <td onClick={handleShopClick} className="py-2 text-left pl-20 text-sm text-gray-700">{shop.name}</td>
+                                                <td className="py-2 text-left pr-[30px] text-sm text-gray-700">{shop.itemCount}</td>
                                             </tr>
                                         ))}
                                     </tbody>

@@ -7,8 +7,10 @@ import { AuthContext } from '../../context/AuthContext';
 
 const Navbar = (props) => {
 
+
   // const [isLoggedIn, setIsLoggedIn] = useState(null)
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  const [reload, setReload] = useState(true)
 
   const navigate = useNavigate();
 
@@ -30,6 +32,7 @@ const Navbar = (props) => {
   const handleHome = async () => {
     try {
       if (!isLoggedIn) {
+        window.location.reload();
         return navigate("/")
       }
       const res = await fetch("/api/verify-login", { method: "POST" })
@@ -78,7 +81,7 @@ const Navbar = (props) => {
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex space-x-4">
           <Link onClick={handleHome} className="px-3 py-2 rounded hover:bg-gray-700">
-            Home
+            {props.homeText ? props.homeText : "Home"}
           </Link>
 
           {isLoggedIn && <Link onClick={() => { handleNavigation("/app/user/add-product") }} className="px-3 py-2 rounded hover:bg-gray-700">
