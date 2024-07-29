@@ -6,7 +6,8 @@ import { useState } from 'react'
 const PublicDashboard = () => {
 
     const [showProductContainer, setShowProductContainer] = useState(false)
-    const [emailOrShopName, setEmailOrShopName] = useState("")
+    // const [emailOrShopName, setEmailOrShopName] = useState("")
+    const [productName, setProductName] = useState("")
     const [products, setProducts] = useState([])
     const [errorMessage, setErrorMessage] = useState('')
     const [shops, setShops] = useState([
@@ -15,7 +16,7 @@ const PublicDashboard = () => {
 
 
     const handleChange = function (e) {
-        setEmailOrShopName(e.target.value)
+        setProductName(e.target.value)
     }
 
     const findProducts = async function (shopName) {
@@ -44,6 +45,41 @@ const PublicDashboard = () => {
         findProducts(e.target.innerHTML)
     }
 
+
+    const findAProduct = async function (productName) {
+        const body = {
+            "productName": productName
+        }
+        try {
+            const res = await fetch("/api/public-user/get-a-product", {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            const response = await res.json() 
+
+            // console.log(response.products[0].product) //.product and .seller
+
+            if (!response.success) {
+                setErrorMessage(response.message)
+                return setShowProductContainer(false);
+            }
+
+            const finalProductsList = []
+            await response.products.forEach(product => {
+                // console.log(product.product) //.product and .seller
+                finalProductsList.push(product.product)
+            });
+
+            console.log("this is final list " ,finalProductsList)
+            setProducts(finalProductsList)
+            setShowProductContainer(true);
+
+        } catch (error) {
+            console.log("Something went wrong - ", error) 
+        }
+    }
+
     useEffect(() => {
         const findShops = async function () {
             try {
@@ -65,26 +101,22 @@ const PublicDashboard = () => {
         findShops()
     }, [])
 
-
-
-
     return (
         <>
             {!showProductContainer? <Navbar /> : <Navbar homeText="Back to Home" />}
-            
             <div className='flex flex-row flex-wrap max-h-[640px] min-h-[calc(100vh-140px)] overflow-scroll'>
                 {!showProductContainer ?
                     <div className=' flex-colflex items-start justify-center min-h-full min-w-full'>
                         <div className='flex mx-auto flex-col justify-center items-center'>
                             <div className='mt-5 flex items-center justify-center gap-3'>
                                 <label htmlFor="usernameOrEmail" className="block text-sm font-medium text-gray-700">
-                                    Email/Shop Name
+                                    Product Name
                                 </label>
                                 <input
                                     type="text"
                                     name="usernameOrEmail"
                                     id="usernameOrEmail"
-                                    value={emailOrShopName}
+                                    value={productName}
                                     onChange={handleChange}
                                     required
                                     className=" px-3 py-2 mt-1 border border-gray-300 rounded-md"
@@ -93,7 +125,7 @@ const PublicDashboard = () => {
                                 <button
                                     type="submit"
                                     className="px-4 py-2 text-white bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                    onClick={() => { findProducts(emailOrShopName) }}
+                                    onClick={() => {findAProduct(productName)}}
                                 >
                                     Find Products
                                 </button>
@@ -175,17 +207,7 @@ const PublicDashboard = () => {
                         })
                     )
                 }
-
-
-
             </div>
-
-
-
-
-
-
-
 
             <Footer />
         </>
