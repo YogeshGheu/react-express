@@ -55,4 +55,20 @@ const getProducts = async function (req, res) {
 	}
 };
 
-export { addProduct, getProducts };
+const deleteAProduct = async function (req, res) {
+	try {
+		await Product.findByIdAndDelete(req.body.productId);
+		return res.status(200).json({
+			success: true,
+			message: "ok",
+		});
+		
+	} catch (error) {
+		return res.status(200).json({
+			success: false,
+			message: "Something went wrong !",
+		});
+	}
+};
+
+export { addProduct, getProducts, deleteAProduct };

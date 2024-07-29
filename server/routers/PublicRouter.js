@@ -83,7 +83,7 @@ publicRouter.get("/get-shops", async (req, res) => {
 
 // get all the products of a specific name
 publicRouter.post("/get-a-product", async (req, res) => {
-	// console.log(req.body); // e.g. { productName: 'laptop' }
+	// console.log(req.body); //-> output: { productName: 'something' }
 	if (!req.body.productName) {
 		return res.json({
 			success: false,
