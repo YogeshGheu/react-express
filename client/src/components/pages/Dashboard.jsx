@@ -9,25 +9,48 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
   const [products, setProducts] = useState([])
- 
-  useEffect(() => {
-    const products = async function () {
-      try {
-        const res = await fetch("/api/product/get-products", { method: "GET" })
-        const response = await res.json();
-        if (!response.success) {
-          return navigate('/user/login', { state: { "error": "Something went wrong! Please Login Again." } });
-        }
-        const productsArray = response.products
-        setProducts(productsArray)
 
-      } catch (error) {
-        console.error("Error fetching products:", error);
+  const fetchProducts = async function () {
+    try {
+      const res = await fetch("/api/product/get-products", { method: "GET" })
+      const response = await res.json();
+      if (!response.success) {
+        return navigate('/user/login', { state: { "error": "Something went wrong! Please Login Again." } });
       }
-    }
-    products()
+      const productsArray = response.products
+      setProducts(productsArray)
 
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchProducts()
   }, []);
+
+  const handleDeleteProduct = async function (productId) {
+    try {
+      const body = {
+        "productId": productId
+      }
+      const res = await fetch(
+        "/api/product/remove-product",
+        {
+          method: "POST",
+          body: JSON.stringify(body),
+          headers: { 'Content-Type': 'application/json' }
+        }
+      )
+      const response = await res.json();
+      if (!response.success) {
+        return navigate('/user/login', { state: { "error": "Something went wrong! Please Login Again." } });
+      }
+      fetchProducts()
+    } catch (error) {
+      console.error("Error Occured: ", error);
+    }
+  }
 
 
   return (
@@ -35,13 +58,12 @@ const Dashboard = () => {
 
     <div>
       <Navbar />
-      
+
 
       <div className='flex flex-row flex-wrap max-h-[640px] min-h-[640px] overflow-scroll'>
         {products.map((product) => {
           return (
-
-            <div key={product._id} className="max-w-[222px] max-h-[400px] min-w-[222px] min-h-[400px] m-2 overflow-hidden rounded-xl shadow-lg bg-white">
+            <div key={product._id} className="max-w-[222px] max-h-[430px] min-w-[222px] min-h-[430px] m-2 overflow-hidden rounded-xl shadow-lg bg-white">
               <div className='min-h-full flex flex-col justify-between'>
                 <div className="">
                   <img
@@ -62,7 +84,10 @@ const Dashboard = () => {
                     <span className="font-bold text-xl">INR{" " + product.productPrice}</span>
                   </div>
                   <div>
-                    <button className="w-full bg-gray-800 text-white font-bold py-2 hover:bg-gray-700">
+                    <button onClick={() => { handleDeleteProduct(product._id) }} className="w-full bg-gray-700 text-white font-bold py-1 hover:bg-gray-600">
+                      Delete
+                    </button>
+                    <button className="w-full bg-gray-900 text-white font-bold py-1 hover:bg-gray-800">
                       Buy Now
                     </button>
                   </div>
