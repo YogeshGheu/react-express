@@ -62,5 +62,3 @@ app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`);
 });
 
-// need to reconfigure the routes, so any user can see the homepage
-// but how he will fetch the products related to a user
