@@ -3,7 +3,7 @@ import Navbar from "../partials/NavigationBar"
 import Footer from "../partials/FooterBar"
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { ToastContainer, toast } from 'react-toastify';
 
 const Dashboard = () => {
 
@@ -47,8 +47,10 @@ const Dashboard = () => {
         return navigate('/user/login', { state: { "error": "Something went wrong! Please Login Again." } });
       }
       fetchProducts()
+      toast.success("Product Deleted Successfully!")
     } catch (error) {
       console.error("Error Occured: ", error);
+      toast.error("Failed to delete product!")
     }
   }
 
@@ -102,6 +104,7 @@ const Dashboard = () => {
 
 
       <Footer />
+      <ToastContainer/>
     </div>
   )
 }
