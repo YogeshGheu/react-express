@@ -11,26 +11,24 @@ const AboutUser = () => {
   const [userDetails, setUserDetails] = useState({})
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-
-
-    const getUserDetails = async function () {
-      try {
-        const res = await fetch("/api/app/get-user-details", { method: "POST" });
-        const response = await res.json();
-        if (!response.success) {
-          return navigate('/user/login', { state: { "error": "Something went wrong. Please Login Again." } });
-        }
-        setUserDetails(response.user)
-      } catch (error) {
-        return console.log("error occured: ", error)
-      } finally {
-        setLoading(false);
+  const getUserDetails = async function () {
+    try {
+      const res = await fetch("/api/app/get-user-details", { method: "POST" });
+      const response = await res.json();
+      if (!response.success) {
+        return navigate('/user/login', { state: { "error": "Something went wrong. Please Login Again." } });
       }
+      setUserDetails(response.user)
+    } catch (error) {
+      return console.log("error occured: ", error)
+    } finally {
+      setLoading(false);
     }
+  }
+
+  useEffect(() => {
     getUserDetails();
   }, [])
-
 
   if (loading) {
     return (
