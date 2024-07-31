@@ -3,7 +3,7 @@
 
 This is a shop app on which an individual retailter can register. He can list all the pruducts he is selling. There may me multiple retailers. Individual retailers will have there own products which they will list using add product functionality.
 
-As a public user we can enter the retailer name and find the products he is selling and can contact the seller to buy the item.
+As a public user we can enter the product name and find all the products listed by all sellers.
 
 
 
@@ -14,9 +14,10 @@ This app is created to learn how to connect frontend and backend. How users are 
 
 ## Features
 
-- Signup as a new retailer
+- Signup as a new seller
 - List all the products
-- public user can enter the retailer name and find their products.
+- public user can enter the product name and find the products.
+- public user can click on the seller name in the list displayed on the homepage to check their all items.
 
 
 
