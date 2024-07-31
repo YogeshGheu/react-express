@@ -56,17 +56,43 @@ const getProducts = async function (req, res) {
 };
 
 const deleteAProduct = async function (req, res) {
+
 	try {
-		await Product.findByIdAndDelete(req.body.productId);
+		const product = await Product.findById(req.body.productId);
+		if (!product) {
+			return res.status(404).json({
+				success: false,
+				message: "Product not found",
+			});
+		}
+
+		const user = await User.findOne({ email: req.user.email }).exec();
+		if (!user) {
+			return res.status(404).json({
+				success: false,
+				message: "User not found",
+			});
+		}
+		// console.log("(req) this is the product id: ", product._id);
+		// console.log("(req) this is user email: ", req.user.email);
+
+		if (user.products.includes(req.body.productId)) {
+			user.products.pull(req.body.productId);
+			await user.save();
+			console.log("Product removed");
+		} else {
+			console.log("Product not found in user's products array");
+		}
+
 		return res.status(200).json({
 			success: true,
-			message: "ok",
+			message: "Product processed",
 		});
-		
 	} catch (error) {
-		return res.status(200).json({
+		console.error(error);
+		return res.status(500).json({
 			success: false,
-			message: "Something went wrong !",
+			message: "Something went wrong!",
 		});
 	}
 };
