@@ -7,7 +7,7 @@ const PublicDashboard = () => {
 
     const [showProductContainer, setShowProductContainer] = useState(false)
     // const [emailOrShopName, setEmailOrShopName] = useState("")
-    const [productName, setProductName] = useState("")
+    const [productName, setProductName] = useState("laptop")
     const [products, setProducts] = useState([])
     const [errorMessage, setErrorMessage] = useState('')
     const [shops, setShops] = useState([
@@ -34,7 +34,16 @@ const PublicDashboard = () => {
                 setErrorMessage(response.message)
                 return setShowProductContainer(false);
             }
-            setProducts(response.products)
+
+            const finalProductsList = []
+            await response.products.forEach(product => {
+                // console.log(product.product) //.product and .seller
+                const eachProductInfo = {...product.product, "seller":product.seller}
+                finalProductsList.push(eachProductInfo)
+            });
+
+            // console.log("this is final list " ,finalProductsList)
+            setProducts(finalProductsList)
             setShowProductContainer(true);
         } catch (error) {
             console.log("Something went wrong - ", error)
@@ -58,20 +67,20 @@ const PublicDashboard = () => {
             })
             const response = await res.json() 
 
-            // console.log(response.products[0].product) //.product and .seller
-
             if (!response.success) {
                 setErrorMessage(response.message)
                 return setShowProductContainer(false);
             }
 
             const finalProductsList = []
+            
             await response.products.forEach(product => {
                 // console.log(product.product) //.product and .seller
-                finalProductsList.push(product.product)
+                const eachProductInfo = {...product.product, "seller":product.seller}
+                finalProductsList.push(eachProductInfo)
             });
 
-            console.log("this is final list " ,finalProductsList)
+            // console.log("this is final list " ,finalProductsList)
             setProducts(finalProductsList)
             setShowProductContainer(true);
 
@@ -175,7 +184,7 @@ const PublicDashboard = () => {
                         products.map((product) => {
                             return (
 
-                                <div key={product._id} className="max-w-[222px] max-h-[400px] min-w-[222px] min-h-[400px] m-2 overflow-hidden rounded-xl shadow-lg bg-white">
+                                <div key={product._id} className="max-w-[222px] max-h-[430px] min-w-[222px] min-h-[430px] m-2 overflow-hidden rounded-xl shadow-lg bg-white">
                                     <div className='min-h-full flex flex-col justify-between'>
                                         <div className="">
                                             <img
@@ -196,7 +205,10 @@ const PublicDashboard = () => {
                                                 <span className="font-bold text-xl">INR{" " + product.productPrice}</span>
                                             </div>
                                             <div>
-                                                <button className="w-full bg-gray-800 text-white font-bold py-2 hover:bg-gray-700">
+                                                <button className="w-full bg-gray-700 text-white text-sm text-left px-2 py-1 hover:bg-gray-600">
+                                                    Sold By: {" " + product.seller}
+                                                </button>
+                                                <button className="w-full bg-gray-900 text-white font-bold py-1 hover:bg-gray-800">
                                                     Buy Now
                                                 </button>
                                             </div>

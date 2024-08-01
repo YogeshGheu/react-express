@@ -62,4 +62,3 @@ app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`);
 });
 
-// now a a buttom on the product card so that the user can also delete a product
