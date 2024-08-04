@@ -11,9 +11,17 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import publicRouter from "./routers/PublicRouter.js";
 import "dotenv/config";
+import cloudinary from "cloudinary"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+cloudinary.v2.config({
+	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET,
+	secure: true,
+  });
 
 const app = express();
 const port = 3000;
@@ -61,4 +69,3 @@ app.post("/api/verify-login", (req, res) => {
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`);
 });
-

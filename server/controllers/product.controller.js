@@ -1,39 +1,46 @@
 import mongoose from "mongoose";
 import { Product } from "../models/product.model.js";
 import { User } from "../models/user.model.js";
+import cloudinary from "cloudinary"
+import fs from "fs"
 
 const addProduct = async function (req, res) {
 	const { productName, productDescription, price } = req.body;
 	// console.log(productName, productDescription, price);
 	// console.log(req.file);
 	try {
+
+		// upload image on cloudinary
+		const uploadResult = await cloudinary.uploader.upload(req.file.path)
+		await fs.promises.unlink(req.file.path);
+
+		// create the product in DB 
 		const product = await Product.create({
 			productName: productName,
 			productDescription: productDescription,
 			productPrice: price,
-			productImage: `/public/uploads/${req.file.filename}`,
+			productImage: uploadResult.secure_url,
 		});
 
-		// const ObjId = new mongoose.Types.ObjectId(product._id)
-		const ObjId = product._id;
-
-		const user = await User.updateOne(
+		// update user products array 
+		await User.updateOne(
 			{ email: req.user.email },
 			{ $push: { products: product._id } }
 		);
-		// console.log(user);
+
+		// send the response
+		return res.status(200).json({
+			success: true,
+			message: "ok",
+		});
 	} catch (error) {
+		console.log(error)
 		return res.status(500).json({
 			success: false,
 			message: "product is not created, Internal Server Error!",
 			error: error,
 		});
 	}
-
-	return res.status(200).json({
-		success: true,
-		message: "ok",
-	});
 };
 
 const getProducts = async function (req, res) {
@@ -73,16 +80,28 @@ const deleteAProduct = async function (req, res) {
 				message: "User not found",
 			});
 		}
-		// console.log("(req) this is the product id: ", product._id);
+		// console.log("(req) this is the product id: ", product._id );
 		// console.log("(req) this is user email: ", req.user.email);
 
 		if (user.products.includes(req.body.productId)) {
+
+			// delete the product from products database
+			await Product.findByIdAndDelete(product._id)
+
+			// remove the product from user's products array
 			user.products.pull(req.body.productId);
 			await user.save();
+			
+			// delete the image from cloudinary
+			const image_public_id = product.productImage.split("/").slice(-1)[0].split(".")[0]
+			await cloudinary.uploader.destroy(image_public_id)
+
 			console.log("Product removed");
 		} else {
 			console.log("Product not found in user's products array");
 		}
+
+		
 
 		return res.status(200).json({
 			success: true,
