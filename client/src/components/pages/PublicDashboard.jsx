@@ -8,7 +8,8 @@ const PublicDashboard = () => {
     const [showProductContainer, setShowProductContainer] = useState(false)
     // const [emailOrShopName, setEmailOrShopName] = useState("")
     const [productName, setProductName] = useState("")
-    const [products, setProducts] = useState([])
+    // const [products, setProducts] = useState([])
+    const [products, setProducts] = useState(["Loading..."])
     const [errorMessage, setErrorMessage] = useState('')
     const [shops, setShops] = useState([
         { name: "yogesh", itemCount: 20 }
@@ -181,49 +182,52 @@ const PublicDashboard = () => {
                     </div>
                     :
                     (
-                        !products.length ? <div className='flex text-2xl justify-center items-center w-[100%] max-h-[640px] min-h-[640px] overflow-scroll'>
-                            No Products to Display 🤓
-                        </div> :
+                        products[0] === "Loading..." ? <div className='flex text-2xl justify-center items-center max-h-[640px] min-h-[640px] overflow-scroll'>
+                            Loading... 🤓
+                        </div>
+                            :
+                            !products.length ? <div className='flex text-2xl justify-center items-center w-[100%] max-h-[640px] min-h-[640px] overflow-scroll'>
+                                No Products to Display 🤓
+                            </div>
+                                :
+                                products.map((product) => {
+                                    return (
+                                        <div key={product._id} className="max-w-[222px] max-h-[430px] min-w-[222px] min-h-[430px] m-2 overflow-hidden rounded-xl shadow-lg bg-white">
+                                            <div className='min-h-full flex flex-col justify-between'>
+                                                <div className="">
+                                                    <img
+                                                        className="w-full"
+                                                        src={product.productImage}
 
-                            products.map((product) => {
-                                return (
-                                    <div key={product._id} className="max-w-[222px] max-h-[430px] min-w-[222px] min-h-[430px] m-2 overflow-hidden rounded-xl shadow-lg bg-white">
-                                        <div className='min-h-full flex flex-col justify-between'>
-                                            <div className="">
-                                                <img
-                                                    className="w-full"
-                                                    src={product.productImage}
-
-                                                    alt="product image"
-                                                />
-                                            </div>
-                                            <div>
-                                                <div className="px-6 py-2">
-                                                    <div className="font-bold text-xl mb-1">{product.productName}</div>
-                                                    <p className="text-gray-700 text-sm max-h-[50px] overflow-scroll">
-                                                        {product.productDescription}
-                                                    </p>
-                                                </div>
-                                                <div className="px-6 py-2 flex items-center justify-between">
-                                                    <span className="font-bold text-xl">INR{" " + product.productPrice}</span>
+                                                        alt="product image"
+                                                    />
                                                 </div>
                                                 <div>
-                                                    <button className="w-full bg-gray-700 text-white text-sm text-left px-2 py-1 hover:bg-gray-600">
-                                                        Sold By: {" " + product.seller}
-                                                    </button>
-                                                    <button className="w-full bg-gray-900 text-white font-bold py-1 hover:bg-gray-800">
-                                                        Buy Now
-                                                    </button>
+                                                    <div className="px-6 py-2">
+                                                        <div className="font-bold text-xl mb-1">{product.productName}</div>
+                                                        <p className="text-gray-700 text-sm max-h-[50px] overflow-scroll">
+                                                            {product.productDescription}
+                                                        </p>
+                                                    </div>
+                                                    <div className="px-6 py-2 flex items-center justify-between">
+                                                        <span className="font-bold text-xl">INR{" " + product.productPrice}</span>
+                                                    </div>
+                                                    <div>
+                                                        <button className="w-full bg-gray-700 text-white text-sm text-left px-2 py-1 hover:bg-gray-600">
+                                                            Sold By: {" " + product.seller}
+                                                        </button>
+                                                        <button className="w-full bg-gray-900 text-white font-bold py-1 hover:bg-gray-800">
+                                                            Buy Now
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                )
-                            })
+                                    )
+                                })
                     )
                 }
             </div>
-
             <Footer />
         </>
 

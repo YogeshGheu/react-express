@@ -8,7 +8,8 @@ import { ToastContainer, toast } from 'react-toastify';
 const Dashboard = () => {
 
   const navigate = useNavigate();
-  const [products, setProducts] = useState([])
+  // const [products, setProducts] = useState([{productDescription:"Loading...", productPrice:"Loading...", productName:"Loading..."}])
+  const [products, setProducts] = useState(["Loading..."])
 
   const fetchProducts = async function () {
     try {
@@ -61,6 +62,10 @@ const Dashboard = () => {
 
     <div>
       <Navbar />
+
+      {products[0] === "Loading..." && <div className='flex text-2xl justify-center items-center max-h-[640px] min-h-[640px] overflow-scroll'>
+        Loading... 🤓
+      </div>}
 
       {!products.length ? <div className='flex text-2xl justify-center items-center max-h-[640px] min-h-[640px] overflow-scroll'>
         No Products to Display 🤓
