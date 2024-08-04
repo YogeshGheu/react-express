@@ -38,7 +38,7 @@ const PublicDashboard = () => {
             const finalProductsList = []
             await response.products.forEach(product => {
                 // console.log(product.product) //.product and .seller
-                const eachProductInfo = {...product.product, "seller":product.seller}
+                const eachProductInfo = { ...product.product, "seller": product.seller }
                 finalProductsList.push(eachProductInfo)
             });
 
@@ -65,7 +65,7 @@ const PublicDashboard = () => {
                 body: JSON.stringify(body),
                 headers: { 'Content-Type': 'application/json' }
             })
-            const response = await res.json() 
+            const response = await res.json()
 
             if (!response.success) {
                 setErrorMessage(response.message)
@@ -73,10 +73,10 @@ const PublicDashboard = () => {
             }
 
             const finalProductsList = []
-            
+
             await response.products.forEach(product => {
                 // console.log(product.product) //.product and .seller
-                const eachProductInfo = {...product.product, "seller":product.seller}
+                const eachProductInfo = { ...product.product, "seller": product.seller }
                 finalProductsList.push(eachProductInfo)
             });
 
@@ -85,7 +85,7 @@ const PublicDashboard = () => {
             setShowProductContainer(true);
 
         } catch (error) {
-            console.log("Something went wrong - ", error) 
+            console.log("Something went wrong - ", error)
         }
     }
 
@@ -112,7 +112,7 @@ const PublicDashboard = () => {
 
     return (
         <>
-            {!showProductContainer? <Navbar /> : <Navbar homeText="Back to Home" />}
+            {!showProductContainer ? <Navbar /> : <Navbar homeText="Back to Home" />}
             <div className='flex flex-row flex-wrap max-h-[640px] min-h-[calc(100vh-140px)] overflow-scroll'>
                 {!showProductContainer ?
                     <div className=' flex-colflex items-start justify-center min-h-full min-w-full'>
@@ -134,7 +134,7 @@ const PublicDashboard = () => {
                                 <button
                                     type="submit"
                                     className="px-4 py-2 text-white bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                    onClick={() => {findAProduct(productName)}}
+                                    onClick={() => { findAProduct(productName) }}
                                 >
                                     Find Products
                                 </button>
@@ -181,42 +181,45 @@ const PublicDashboard = () => {
                     </div>
                     :
                     (
-                        products.map((product) => {
-                            return (
+                        !products.length ? <div className='flex text-2xl justify-center items-center w-[100%] max-h-[640px] min-h-[640px] overflow-scroll'>
+                            No Products to Display 🤓
+                        </div> :
 
-                                <div key={product._id} className="max-w-[222px] max-h-[430px] min-w-[222px] min-h-[430px] m-2 overflow-hidden rounded-xl shadow-lg bg-white">
-                                    <div className='min-h-full flex flex-col justify-between'>
-                                        <div className="">
-                                            <img
-                                                className="w-full"
-                                                src={product.productImage}
+                            products.map((product) => {
+                                return (
+                                    <div key={product._id} className="max-w-[222px] max-h-[430px] min-w-[222px] min-h-[430px] m-2 overflow-hidden rounded-xl shadow-lg bg-white">
+                                        <div className='min-h-full flex flex-col justify-between'>
+                                            <div className="">
+                                                <img
+                                                    className="w-full"
+                                                    src={product.productImage}
 
-                                                alt="product image"
-                                            />
-                                        </div>
-                                        <div>
-                                            <div className="px-6 py-2">
-                                                <div className="font-bold text-xl mb-1">{product.productName}</div>
-                                                <p className="text-gray-700 text-sm max-h-[50px] overflow-scroll">
-                                                    {product.productDescription}
-                                                </p>
-                                            </div>
-                                            <div className="px-6 py-2 flex items-center justify-between">
-                                                <span className="font-bold text-xl">INR{" " + product.productPrice}</span>
+                                                    alt="product image"
+                                                />
                                             </div>
                                             <div>
-                                                <button className="w-full bg-gray-700 text-white text-sm text-left px-2 py-1 hover:bg-gray-600">
-                                                    Sold By: {" " + product.seller}
-                                                </button>
-                                                <button className="w-full bg-gray-900 text-white font-bold py-1 hover:bg-gray-800">
-                                                    Buy Now
-                                                </button>
+                                                <div className="px-6 py-2">
+                                                    <div className="font-bold text-xl mb-1">{product.productName}</div>
+                                                    <p className="text-gray-700 text-sm max-h-[50px] overflow-scroll">
+                                                        {product.productDescription}
+                                                    </p>
+                                                </div>
+                                                <div className="px-6 py-2 flex items-center justify-between">
+                                                    <span className="font-bold text-xl">INR{" " + product.productPrice}</span>
+                                                </div>
+                                                <div>
+                                                    <button className="w-full bg-gray-700 text-white text-sm text-left px-2 py-1 hover:bg-gray-600">
+                                                        Sold By: {" " + product.seller}
+                                                    </button>
+                                                    <button className="w-full bg-gray-900 text-white font-bold py-1 hover:bg-gray-800">
+                                                        Buy Now
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            )
-                        })
+                                )
+                            })
                     )
                 }
             </div>
