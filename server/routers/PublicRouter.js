@@ -79,8 +79,7 @@ publicRouter.post("/get-products", async (req, res) => {
 			});
 		});
 
-		console.log("This is product user", user);
-
+		// console.log("This is product user", user);
 		return res.json({
 			success: true,
 			message: "ok",
