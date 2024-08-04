@@ -70,7 +70,7 @@ const Dashboard = () => {
                 <div className="">
                   <img
                     className="w-full"
-                    src={`http://localhost:3000${product.productImage}`}
+                    src={product.productImage}
 
                     alt="product image"
                   />

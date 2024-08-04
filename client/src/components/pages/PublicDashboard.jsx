@@ -7,7 +7,7 @@ const PublicDashboard = () => {
 
     const [showProductContainer, setShowProductContainer] = useState(false)
     // const [emailOrShopName, setEmailOrShopName] = useState("")
-    const [productName, setProductName] = useState("laptop")
+    const [productName, setProductName] = useState("")
     const [products, setProducts] = useState([])
     const [errorMessage, setErrorMessage] = useState('')
     const [shops, setShops] = useState([
@@ -189,7 +189,7 @@ const PublicDashboard = () => {
                                         <div className="">
                                             <img
                                                 className="w-full"
-                                                src={`http://localhost:3000${product.productImage}`}
+                                                src={product.productImage}
 
                                                 alt="product image"
                                             />
